@@ -14,7 +14,7 @@ To create a function in Dart:
 
 ```bash
 # specify the return type followed by the function name and parameters(optional)
-int add(int number1, int number b) {
+int add(int number1, int number2) {
   return number1 + number2;
 }
 
@@ -26,4 +26,7 @@ T returnInput<T>(String input) {
     return input as T;
   }
 }
+
+var number1 = returnInput<int>('10');
+var text1 = returnInput<String>('Hello world');
 ```
