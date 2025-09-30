@@ -22,7 +22,7 @@ jobs:
         uses: dart-lang/setup-dart@v1
         if: steps.extract_folder.outputs.folder_name != ''
         with:
-          sdk: '3.8'  
+          sdk: '3.9'  
       - name: Install dependencies
         if: steps.extract_folder.outputs.folder_name != ''
         working-directory: ${{ steps.extract_folder.outputs.folder_name }}
