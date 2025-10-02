@@ -78,7 +78,7 @@ class Hero {
 
   factory Hero.fromJson(Map<String, dynamic> json) {
     return Hero(
-      id: Uuid().v4(),
+      id: json['id'],
       name: json['name'],
       powerstats: PowerStats.fromJson(json['powerstats'] ?? {}),
       appearance: Appearance.fromJson(json['appearance'] ?? {}),
@@ -88,6 +88,7 @@ class Hero {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'name': name,
       'powerstats': powerstats.toJson(),
       'appearance': appearance.toJson(),
@@ -97,6 +98,6 @@ class Hero {
 
   @override
   String toString() {
-    return '(id: $id, name: $name, strength: ${powerstats.strength}, gender: ${appearance.gender}, race: ${appearance.race}, alignment: ${biography.alignment})';
+    return '$id: $name (${appearance.gender}, ${appearance.race}), strength: ${powerstats.strength}, alignment: ${biography.alignment}';
   }
 }
