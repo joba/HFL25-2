@@ -97,6 +97,6 @@ class Hero {
 
   @override
   String toString() {
-    return 'Hero(id: $id, name: $name, strength: ${powerstats.strength}, gender: ${appearance.gender}, race: ${appearance.race}, alignment: ${biography.alignment})';
+    return '(id: $id, name: $name, strength: ${powerstats.strength}, gender: ${appearance.gender}, race: ${appearance.race}, alignment: ${biography.alignment})';
   }
 }
