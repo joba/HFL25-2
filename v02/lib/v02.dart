@@ -52,6 +52,9 @@ void viewHeroes() async {
     print('No heroes found.');
   } else {
     print('Heroes:');
+    heroes.sort(
+      (a, b) => b.powerstats.strength.compareTo(a.powerstats.strength),
+    );
     for (var hero in heroes) {
       print(hero.toString());
     }
