@@ -1,7 +1,8 @@
 import 'dart:io';
 
-import 'package:v02/hero.dart';
 import 'package:v02/storage.dart';
+
+final heroStorage = HeroStorage();
 
 void showMainMenu() {
   print('\nWelcome, make your choice below:');
@@ -20,7 +21,7 @@ void showMainMenu() {
       viewHeroes();
       break;
     case '3':
-      // Search Heroes
+      searchHeroes();
       break;
     case '4':
       print('Goodbye for now!');
@@ -38,11 +39,11 @@ void addNewHero() async {
   var race = getUserInput<String>('Enter hero race: ');
   var alignment = getUserInput<String>('Enter hero alignment (good, evil): ');
 
-  var newHero = Hero.add(name, strength, gender, race, alignment);
+  var newHero = heroStorage.addHero(name, strength, gender, race, alignment);
   var heroes = await loadHeroes();
-  await HeroStorage().saveHeroes([...heroes, newHero]);
+  await heroStorage.saveHeroes([...heroes, newHero]);
 
-  print('Hero ${newHero.name} successfully added!\n');
+  print('Hero ${newHero['name']} successfully added!\n');
   showMainMenu();
 }
 
@@ -53,17 +54,36 @@ void viewHeroes() async {
   } else {
     print('Heroes:');
     heroes.sort(
-      (a, b) => b.powerstats.strength.compareTo(a.powerstats.strength),
+      (a, b) =>
+          b['powerstats']['strength'].compareTo(a['powerstats']['strength']),
     );
-    for (var hero in heroes) {
-      print(hero.toString());
-    }
+    printHeroList(heroes);
   }
   showMainMenu();
 }
 
-Future<List<Hero>> loadHeroes() async {
-  return await HeroStorage().loadHeroes();
+void searchHeroes() async {
+  var heroes = await loadHeroes();
+  var searchTerm = getUserInput<String>(
+    'Enter hero name to search: ',
+  ).toLowerCase();
+  var results = heroes
+      .where(
+        (hero) => (hero['name'] as String).toLowerCase().contains(searchTerm),
+      )
+      .toList();
+
+  if (results.isEmpty) {
+    print('No heroes found matching "$searchTerm".');
+  } else {
+    print('Search results:');
+    printHeroList(results);
+  }
+  showMainMenu();
+}
+
+Future<List<Map<String, dynamic>>> loadHeroes() async {
+  return await heroStorage.loadHeroes();
 }
 
 T getUserInput<T>(String prompt) {
@@ -74,4 +94,14 @@ T getUserInput<T>(String prompt) {
   } else {
     return input as T;
   }
+}
+
+void printHeroList(List<Map<String, dynamic>> heroes) {
+  for (var hero in heroes) {
+    print(toString(hero));
+  }
+}
+
+String toString(Map<String, dynamic> hero) {
+  return '${hero["id"]}: ${hero["name"]} (${hero["appearance"]["gender"]}, ${hero["appearance"]["race"]}), strength: ${hero["powerstats"]["strength"]}, alignment: ${hero["biography"]["alignment"]}';
 }
