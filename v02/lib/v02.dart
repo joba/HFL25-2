@@ -18,7 +18,7 @@ void showMainMenu() {
       addNewHero();
       break;
     case '2':
-      viewHeroes();
+      viewHeroes('strength');
       break;
     case '3':
       searchHeroes();
@@ -29,6 +29,37 @@ void showMainMenu() {
     default:
       print('Invalid option. Please try again.\n');
       showMainMenu();
+  }
+}
+
+void showFilterHeroesMenu() {
+  print('\nFilter and sort heroes:');
+  print('1. Show top 3 strongest heroes');
+  print('2. Sort heroes by race');
+  print('3. Sort heroes by alignment');
+  print('4. Sort heroes by gender');
+  print('5. Back to main menu');
+  var filterOption = stdin.readLineSync();
+
+  switch (filterOption) {
+    case '1':
+      viewHeroes('strength', 3);
+      break;
+    case '2':
+      viewHeroes('race');
+      break;
+    case '3':
+      viewHeroes('alignment');
+      break;
+    case '4':
+      viewHeroes('gender');
+      break;
+    case '5':
+      showMainMenu();
+      break;
+    default:
+      print('Invalid option. Please try again.');
+      showFilterHeroesMenu();
   }
 }
 
@@ -47,19 +78,19 @@ void addNewHero() async {
   showMainMenu();
 }
 
-void viewHeroes() async {
+void viewHeroes(String sortBy, [int? limit]) async {
   var heroes = await loadHeroes();
   if (heroes.isEmpty) {
     print('No heroes found.');
   } else {
-    print('Heroes:');
-    heroes.sort(
-      (a, b) =>
-          b['powerstats']['strength'].compareTo(a['powerstats']['strength']),
-    );
+    heroes = sortHeroes(sortBy, heroes);
+    if (limit != null && limit > 0 && limit < heroes.length) {
+      heroes = heroes.sublist(0, limit);
+    }
+    print('Heroes sorted by $sortBy:');
     printHeroList(heroes);
   }
-  showMainMenu();
+  showFilterHeroesMenu();
 }
 
 void searchHeroes() async {
@@ -80,6 +111,38 @@ void searchHeroes() async {
     printHeroList(results);
   }
   showMainMenu();
+}
+
+List<Map<String, dynamic>> sortHeroes(
+  String sortBy,
+  List<Map<String, dynamic>> heroes,
+) {
+  switch (sortBy) {
+    case 'race':
+      heroes.sort(
+        (a, b) => a['appearance']['race'].compareTo(b['appearance']['race']),
+      );
+      break;
+    case 'alignment':
+      heroes.sort(
+        (a, b) =>
+            a['biography']['alignment'].compareTo(b['biography']['alignment']),
+      );
+      break;
+    case 'gender':
+      heroes.sort(
+        (a, b) =>
+            a['appearance']['gender'].compareTo(b['appearance']['gender']),
+      );
+      break;
+    default:
+      heroes.sort(
+        (a, b) =>
+            b['powerstats']['strength'].compareTo(a['powerstats']['strength']),
+      );
+      break;
+  }
+  return heroes;
 }
 
 Future<List<Map<String, dynamic>>> loadHeroes() async {
