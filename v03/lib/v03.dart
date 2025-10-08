@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:v03/managers/hero_data_manager.dart';
+import 'package:v03/models/hero_model.dart';
 import 'package:v03/storage.dart';
 
 final heroStorage = HeroStorage();
+final heroDataManager = HeroDataManager();
 
 void showMainMenu() {
   print('\nWelcome, make your choice below:');
@@ -71,8 +74,8 @@ void addNewHero() async {
   var alignment = getUserInput<String>('Enter hero alignment (good, evil): ');
 
   var newHero = heroStorage.addHero(name, strength, gender, race, alignment);
-  var heroes = await loadHeroes();
-  await heroStorage.saveHeroes([...heroes, newHero]);
+  // var heroes = await loadHeroes();
+  // await heroStorage.saveHeroes([...heroes, newHero]);
 
   print('Hero ${newHero['name']} successfully added!\n');
   showMainMenu();
@@ -94,59 +97,56 @@ void viewHeroes(String sortBy, [int? limit]) async {
 }
 
 void searchHeroes() async {
-  var heroes = await loadHeroes();
-  var searchTerm = getUserInput<String>(
-    'Enter hero name to search: ',
-  ).toLowerCase();
-  var results = heroes
-      .where(
-        (hero) => (hero['name'] as String).toLowerCase().contains(searchTerm),
-      )
-      .toList();
+  // var heroes = await loadHeroes();
+  // var searchTerm = getUserInput<String>(
+  //   'Enter hero name to search: ',
+  // ).toLowerCase();
+  // var results = heroes
+  //     .where(
+  //       (hero) => (hero['name'] as String).toLowerCase().contains(searchTerm),
+  //     )
+  //     .toList();
 
-  if (results.isEmpty) {
-    print('No heroes found matching "$searchTerm".');
-  } else {
-    print('Search results:');
-    printHeroList(results);
-  }
+  // if (results.isEmpty) {
+  //   print('No heroes found matching "$searchTerm".');
+  // } else {
+  //   print('Search results:');
+  //   printHeroList(results);
+  // }
   showMainMenu();
 }
 
-List<Map<String, dynamic>> sortHeroes(
-  String sortBy,
-  List<Map<String, dynamic>> heroes,
-) {
-  switch (sortBy) {
-    case 'race':
-      heroes.sort(
-        (a, b) => a['appearance']['race'].compareTo(b['appearance']['race']),
-      );
-      break;
-    case 'alignment':
-      heroes.sort(
-        (a, b) =>
-            a['biography']['alignment'].compareTo(b['biography']['alignment']),
-      );
-      break;
-    case 'gender':
-      heroes.sort(
-        (a, b) =>
-            a['appearance']['gender'].compareTo(b['appearance']['gender']),
-      );
-      break;
-    default:
-      heroes.sort(
-        (a, b) =>
-            b['powerstats']['strength'].compareTo(a['powerstats']['strength']),
-      );
-      break;
-  }
+List<HeroModel> sortHeroes(String sortBy, List<HeroModel> heroes) {
+  // switch (sortBy) {
+  //   case 'race':
+  //     heroes.sort(
+  //       (a, b) => a['appearance']['race'].compareTo(b['appearance']['race']),
+  //     );
+  //     break;
+  //   case 'alignment':
+  //     heroes.sort(
+  //       (a, b) =>
+  //           a['biography']['alignment'].compareTo(b['biography']['alignment']),
+  //     );
+  //     break;
+  //   case 'gender':
+  //     heroes.sort(
+  //       (a, b) =>
+  //           a['appearance']['gender'].compareTo(b['appearance']['gender']),
+  //     );
+  //     break;
+  //   default:
+  //     heroes.sort(
+  //       (a, b) =>
+  //           b['powerstats']['strength'].compareTo(a['powerstats']['strength']),
+  //     );
+  //     break;
+  // }
   return heroes;
 }
 
-Future<List<Map<String, dynamic>>> loadHeroes() async {
-  return await heroStorage.loadHeroes();
+Future<List<HeroModel>> loadHeroes() async {
+  return await heroDataManager.loadHeroes();
 }
 
 T getUserInput<T>(String prompt) {
@@ -159,12 +159,12 @@ T getUserInput<T>(String prompt) {
   }
 }
 
-void printHeroList(List<Map<String, dynamic>> heroes) {
+void printHeroList(List<HeroModel> heroes) {
   for (var hero in heroes) {
     print(toString(hero));
   }
 }
 
-String toString(Map<String, dynamic> hero) {
-  return '${hero["id"]}: ${hero["name"]} (${hero["appearance"]["gender"]}, ${hero["appearance"]["race"]}), strength: ${hero["powerstats"]["strength"]}, alignment: ${hero["biography"]["alignment"]}';
+String toString(HeroModel hero) {
+  return '${hero.id}: ${hero.name} (${hero.appearance.gender}, ${hero.appearance.race}), strength: ${hero.powerStats.strength}, alignment: ${hero.biography.alignment}';
 }
