@@ -6,6 +6,11 @@ import 'package:v03/managers/hero_data_managing.dart';
 import 'package:v03/models/hero_model.dart';
 
 class HeroDataManager implements HeroDataManaging {
+  // Create a singleton instance
+  HeroDataManager._internal();
+  static final HeroDataManager _instance = HeroDataManager._internal();
+  factory HeroDataManager() => _instance;
+
   @override
   String get filePath => 'heroes.json';
 
