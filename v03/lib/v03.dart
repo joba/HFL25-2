@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:v03/managers/hero_data_manager.dart';
 import 'package:v03/models/hero_model.dart';
-import 'package:v03/storage.dart';
 
-final heroStorage = HeroStorage();
 final heroDataManager = HeroDataManager();
 
 void showMainMenu() {
@@ -73,11 +71,17 @@ void addNewHero() async {
   var race = getUserInput<String>('Enter hero race: ');
   var alignment = getUserInput<String>('Enter hero alignment (good, evil): ');
 
-  var newHero = heroStorage.addHero(name, strength, gender, race, alignment);
-  // var heroes = await loadHeroes();
-  // await heroStorage.saveHeroes([...heroes, newHero]);
+  // TODO: not pretty, use named parameters instead(?). Make more options optional?
+  var newHero = heroDataManager.createHero(
+    name,
+    PowerStats(0, strength, 0, 0, 0, 0),
+    Biography('', '', [], '', '', '', alignment),
+    Appearance(gender, race, [], [], '', ''),
+  );
+  var heroes = await loadHeroes();
+  await heroDataManager.saveHeroes([...heroes, newHero]);
 
-  print('Hero ${newHero['name']} successfully added!\n');
+  print('Hero ${newHero.name} successfully added!\n');
   showMainMenu();
 }
 
@@ -85,6 +89,7 @@ void viewHeroes(String sortBy, [int? limit]) async {
   var heroes = await loadHeroes();
   if (heroes.isEmpty) {
     print('No heroes found.');
+    showMainMenu();
   } else {
     heroes = sortHeroes(sortBy, heroes);
     if (limit != null && limit > 0 && limit < heroes.length) {
@@ -92,56 +97,59 @@ void viewHeroes(String sortBy, [int? limit]) async {
     }
     print('Heroes sorted by $sortBy:');
     printHeroList(heroes);
+    showFilterHeroesMenu();
   }
-  showFilterHeroesMenu();
 }
 
 void searchHeroes() async {
-  // var heroes = await loadHeroes();
-  // var searchTerm = getUserInput<String>(
-  //   'Enter hero name to search: ',
-  // ).toLowerCase();
-  // var results = heroes
-  //     .where(
-  //       (hero) => (hero['name'] as String).toLowerCase().contains(searchTerm),
-  //     )
-  //     .toList();
+  var heroes = await loadHeroes();
+  var searchTerm = getUserInput<String>(
+    'Enter hero name to search: ',
+  ).toLowerCase();
+  var results = heroes
+      .where((hero) => hero.name.toLowerCase().contains(searchTerm))
+      .toList();
 
-  // if (results.isEmpty) {
-  //   print('No heroes found matching "$searchTerm".');
-  // } else {
-  //   print('Search results:');
-  //   printHeroList(results);
-  // }
+  if (results.isEmpty) {
+    print('No heroes found matching "$searchTerm".');
+  } else {
+    print('Search results:');
+    printHeroList(results);
+  }
   showMainMenu();
 }
 
 List<HeroModel> sortHeroes(String sortBy, List<HeroModel> heroes) {
-  // switch (sortBy) {
-  //   case 'race':
-  //     heroes.sort(
-  //       (a, b) => a['appearance']['race'].compareTo(b['appearance']['race']),
-  //     );
-  //     break;
-  //   case 'alignment':
-  //     heroes.sort(
-  //       (a, b) =>
-  //           a['biography']['alignment'].compareTo(b['biography']['alignment']),
-  //     );
-  //     break;
-  //   case 'gender':
-  //     heroes.sort(
-  //       (a, b) =>
-  //           a['appearance']['gender'].compareTo(b['appearance']['gender']),
-  //     );
-  //     break;
-  //   default:
-  //     heroes.sort(
-  //       (a, b) =>
-  //           b['powerstats']['strength'].compareTo(a['powerstats']['strength']),
-  //     );
-  //     break;
-  // }
+  switch (sortBy) {
+    case 'race':
+      heroes.sort((a, b) {
+        final raceA = a.appearance?.race ?? '';
+        final raceB = b.appearance?.race ?? '';
+        return raceA.compareTo(raceB);
+      });
+      break;
+    case 'alignment':
+      heroes.sort((a, b) {
+        final alignmentA = a.biography?.alignment ?? '';
+        final alignmentB = b.biography?.alignment ?? '';
+        return alignmentA.compareTo(alignmentB);
+      });
+      break;
+    case 'gender':
+      heroes.sort((a, b) {
+        final genderA = a.appearance?.gender ?? '';
+        final genderB = b.appearance?.gender ?? '';
+        return genderA.compareTo(genderB);
+      });
+      break;
+    default:
+      heroes.sort((a, b) {
+        final strengthA = a.powerStats?.strength ?? 0;
+        final strengthB = b.powerStats?.strength ?? 0;
+        return strengthB.compareTo(strengthA);
+      });
+      break;
+  }
   return heroes;
 }
 
@@ -166,5 +174,5 @@ void printHeroList(List<HeroModel> heroes) {
 }
 
 String toString(HeroModel hero) {
-  return '${hero.id}: ${hero.name} (${hero.appearance.gender}, ${hero.appearance.race}), strength: ${hero.powerStats.strength}, alignment: ${hero.biography.alignment}';
+  return '${hero.id}: ${hero.name} (${hero.appearance?.gender}, ${hero.appearance?.race}), strength: ${hero.powerStats?.strength}, alignment: ${hero.biography?.alignment}';
 }

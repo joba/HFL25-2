@@ -7,11 +7,11 @@ abstract class HeroDataManaging {
   Future<List<HeroModel>> loadHeroes();
   HeroModel createHero(
     String name, [
-    powerStats,
-    biography,
-    appearance,
-    work,
-    connections,
-    image,
+    PowerStats? powerStats,
+    Biography? biography,
+    Appearance? appearance,
+    Work? work,
+    Connections? connections,
+    Image? image,
   ]);
 }

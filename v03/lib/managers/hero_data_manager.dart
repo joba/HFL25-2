@@ -12,12 +12,12 @@ class HeroDataManager implements HeroDataManaging {
   @override
   HeroModel createHero(
     String name, [
-    powerStats,
-    biography,
-    appearance,
-    work,
-    connections,
-    image,
+    PowerStats? powerStats,
+    Biography? biography,
+    Appearance? appearance,
+    Work? work,
+    Connections? connections,
+    Image? image,
   ]) {
     var id = Uuid().v4();
     final hero = HeroModel(
@@ -51,7 +51,7 @@ class HeroDataManager implements HeroDataManaging {
       if (await file.exists()) {
         final contents = await file.readAsString();
         final List<dynamic> jsonData = jsonDecode(contents);
-        return List<HeroModel>.from(jsonData);
+        return jsonData.map((json) => HeroModel.fromJson(json)).toList();
       } else {
         return [];
       }

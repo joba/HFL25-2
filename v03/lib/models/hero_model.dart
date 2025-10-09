@@ -77,11 +77,11 @@ class Image {
 class HeroModel {
   final String id;
   final String name;
-  final PowerStats powerStats;
-  final Biography biography;
-  final Appearance appearance;
-  final Work work;
-  final Connections connections;
+  final PowerStats? powerStats;
+  final Biography? biography;
+  final Appearance? appearance;
+  final Work? work;
+  final Connections? connections;
   final Image? image;
 
   HeroModel(
@@ -94,4 +94,101 @@ class HeroModel {
     this.connections,
     this.image,
   );
+
+  // Generated from chatGPT
+  factory HeroModel.fromJson(Map<String, dynamic> json) {
+    return HeroModel(
+      json['id'],
+      json['name'],
+      json['powerstats'] != null
+          ? PowerStats(
+              json['powerstats']['intelligence'] ?? 0,
+              json['powerstats']['strength'] ?? 0,
+              json['powerstats']['speed'] ?? 0,
+              json['powerstats']['durability'] ?? 0,
+              json['powerstats']['power'] ?? 0,
+              json['powerstats']['combat'] ?? 0,
+            )
+          : null,
+      json['biography'] != null
+          ? Biography(
+              json['biography']['fullName'] ?? '',
+              json['biography']['alterEgos'] ?? '',
+              List<String>.from(json['biography']['aliases'] ?? []),
+              json['biography']['placeOfBirth'] ?? '',
+              json['biography']['firstAppearance'] ?? '',
+              json['biography']['publisher'] ?? '',
+              json['biography']['alignment'] ?? '',
+            )
+          : null,
+      json['appearance'] != null
+          ? Appearance(
+              json['appearance']['gender'] ?? '',
+              json['appearance']['race'] ?? '',
+              List<String>.from(json['appearance']['height'] ?? []),
+              List<String>.from(json['appearance']['weight'] ?? []),
+              json['appearance']['eyeColor'] ?? '',
+              json['appearance']['hairColor'] ?? '',
+            )
+          : null,
+      json['work'] != null
+          ? Work(json['work']['occupation'] ?? '', json['work']['base'] ?? '')
+          : null,
+      json['connections'] != null
+          ? Connections(
+              json['connections']['groupAffiliation'] ?? '',
+              json['connections']['relatives'] ?? '',
+            )
+          : null,
+      json['image'] != null ? Image(json['image']['url'] ?? '') : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'powerstats': powerStats != null
+          ? {
+              'intelligence': powerStats!.intelligence,
+              'strength': powerStats!.strength,
+              'speed': powerStats!.speed,
+              'durability': powerStats!.durability,
+              'power': powerStats!.power,
+              'combat': powerStats!.combat,
+            }
+          : null,
+      'biography': biography != null
+          ? {
+              'fullName': biography!.fullName,
+              'alterEgos': biography!.alterEgos,
+              'aliases': biography!.aliases,
+              'placeOfBirth': biography!.placeOfBirth,
+              'firstAppearance': biography!.firstAppearance,
+              'publisher': biography!.publisher,
+              'alignment': biography!.alignment,
+            }
+          : null,
+      'appearance': appearance != null
+          ? {
+              'gender': appearance!.gender,
+              'race': appearance!.race,
+              'height': appearance!.height,
+              'weight': appearance!.weight,
+              'eyeColor': appearance!.eyeColor,
+              'hairColor': appearance!.hairColor,
+            }
+          : null,
+      'work': work != null
+          ? {'occupation': work!.occupation, 'base': work!.base}
+          : null,
+      'connections': connections != null
+          ? {
+              'groupAffiliation': connections!.groupAffiliation,
+              'relatives': connections!.relatives,
+            }
+          : null,
+      'image': image != null ? {'url': image!.url} : null,
+    };
+  }
 }
