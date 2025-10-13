@@ -2,9 +2,10 @@ import 'package:v03/models/hero_model.dart';
 
 abstract class HeroDataManaging {
   String get filePath;
+  List<HeroModel> heroes = [];
 
-  void saveHeroes(List<HeroModel> heroes);
-  Future<List<HeroModel>> loadHeroes();
+  Future<void> saveHero(HeroModel hero);
+  Future<void> loadHeroes();
   HeroModel createHero({
     required String name,
     PowerStats? powerStats,
@@ -14,4 +15,5 @@ abstract class HeroDataManaging {
     Connections? connections,
     Image? image,
   });
+  HeroModel parseData(Map<String, dynamic> json);
 }

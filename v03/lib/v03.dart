@@ -90,15 +90,15 @@ void addNewHero() async {
     biography: biography,
     appearance: appearance,
   );
-  var heroes = await loadHeroes();
-  await heroDataManager.saveHeroes([...heroes, newHero]);
+  await heroDataManager.saveHero(newHero);
 
   print('Hero ${newHero.name} successfully added!\n');
   showMainMenu();
 }
 
 void viewHeroes(String sortBy, [int? limit]) async {
-  var heroes = await loadHeroes();
+  await heroDataManager.loadHeroes();
+  var heroes = heroDataManager.heroes;
   if (heroes.isEmpty) {
     print('No heroes found.');
     showMainMenu();
@@ -113,8 +113,8 @@ void viewHeroes(String sortBy, [int? limit]) async {
   }
 }
 
-void searchHeroes() async {
-  var heroes = await loadHeroes();
+void searchHeroes() {
+  var heroes = heroDataManager.heroes;
   var searchTerm = getUserInput<String>(
     'Enter hero name to search: ',
   ).toLowerCase();
@@ -165,9 +165,9 @@ List<HeroModel> sortHeroes(String sortBy, List<HeroModel> heroes) {
   return heroes;
 }
 
-Future<List<HeroModel>> loadHeroes() async {
-  return await heroDataManager.loadHeroes();
-}
+// Future<List<HeroModel>> loadHeroes() async {
+//   return await heroDataManager.loadHeroes();
+// }
 
 T getUserInput<T>(String prompt) {
   stdout.write(prompt);

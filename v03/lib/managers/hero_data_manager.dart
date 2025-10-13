@@ -11,6 +11,11 @@ class HeroDataManager implements HeroDataManaging {
   static final HeroDataManager _instance = HeroDataManager._internal();
   factory HeroDataManager() => _instance;
 
+  bool _loaded = false;
+
+  @override
+  List<HeroModel> heroes = [];
+
   @override
   String get filePath => 'heroes.json';
 
@@ -39,30 +44,39 @@ class HeroDataManager implements HeroDataManaging {
   }
 
   @override
-  Future<void> saveHeroes(List<HeroModel> heroes) async {
+  Future<void> saveHero(HeroModel hero) async {
+    if (!_loaded) {
+      await loadHeroes();
+    }
+
     try {
       final file = File(filePath);
-      final contents = jsonEncode(heroes);
+      final contents = jsonEncode([...heroes, hero]);
       await file.writeAsString(contents);
+      _loaded = false;
     } catch (e) {
       print('Error saving heroes: $e');
     }
   }
 
   @override
-  Future<List<HeroModel>> loadHeroes() async {
+  Future<void> loadHeroes() async {
+    if (_loaded) return; // Prevent reloading if already loaded
     try {
       final file = File(filePath);
       if (await file.exists()) {
         final contents = await file.readAsString();
         final List<dynamic> jsonData = jsonDecode(contents);
-        return jsonData.map((json) => HeroModel.fromJson(json)).toList();
-      } else {
-        return [];
+        heroes = jsonData.map((json) => HeroModel.fromJson(json)).toList();
+        _loaded = true;
       }
     } catch (e) {
       print('Error loading heroes: $e');
-      return [];
     }
+  }
+
+  @override
+  HeroModel parseData(Map<String, dynamic> json) {
+    return HeroModel.fromJson(json);
   }
 }
