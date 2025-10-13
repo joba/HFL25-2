@@ -72,11 +72,23 @@ void addNewHero() async {
   var alignment = getUserInput<String>('Enter hero alignment (good, evil): ');
 
   // TODO: not pretty, use named parameters instead(?). Make more options optional?
+  PowerStats powerStats = PowerStats(0, strength, 0, 0, 0, 0);
+  Biography biography = Biography(
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    alignment,
+  );
+  Appearance appearance = Appearance(gender, race, null, null, null, null);
+
   var newHero = heroDataManager.createHero(
-    name,
-    PowerStats(0, strength, 0, 0, 0, 0),
-    Biography('', '', [], '', '', '', alignment),
-    Appearance(gender, race, [], [], '', ''),
+    name: name,
+    powerStats: powerStats,
+    biography: biography,
+    appearance: appearance,
   );
   var heroes = await loadHeroes();
   await heroDataManager.saveHeroes([...heroes, newHero]);

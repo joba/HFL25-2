@@ -1,10 +1,10 @@
 class PowerStats {
-  final int intelligence;
-  final int strength;
-  final int speed;
-  final int durability;
-  final int power;
-  final int combat;
+  final int? intelligence;
+  final int? strength;
+  final int? speed;
+  final int? durability;
+  final int? power;
+  final int? combat;
 
   PowerStats(
     this.intelligence,
@@ -17,13 +17,13 @@ class PowerStats {
 }
 
 class Biography {
-  final String fullName;
-  final String alterEgos;
-  final List<String> aliases;
-  final String placeOfBirth;
-  final String firstAppearance;
-  final String publisher;
-  final String alignment;
+  final String? fullName;
+  final String? alterEgos;
+  final List<String>? aliases;
+  final String? placeOfBirth;
+  final String? firstAppearance;
+  final String? publisher;
+  final String? alignment;
 
   Biography(
     this.fullName,
@@ -37,12 +37,12 @@ class Biography {
 }
 
 class Appearance {
-  final String gender;
-  final String race;
-  final List<String> height;
-  final List<String> weight;
-  final String eyeColor;
-  final String hairColor;
+  final String? gender;
+  final String? race;
+  final List<String>? height;
+  final List<String>? weight;
+  final String? eyeColor;
+  final String? hairColor;
 
   Appearance(
     this.gender,
@@ -55,15 +55,15 @@ class Appearance {
 }
 
 class Work {
-  final String occupation;
-  final String base;
+  final String? occupation;
+  final String? base;
 
   Work(this.occupation, this.base);
 }
 
 class Connections {
-  final String groupAffiliation;
-  final String relatives;
+  final String? groupAffiliation;
+  final String? relatives;
 
   Connections(this.groupAffiliation, this.relatives);
 }

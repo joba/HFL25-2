@@ -15,15 +15,15 @@ class HeroDataManager implements HeroDataManaging {
   String get filePath => 'heroes.json';
 
   @override
-  HeroModel createHero(
-    String name, [
+  HeroModel createHero({
+    required String name,
     PowerStats? powerStats,
     Biography? biography,
     Appearance? appearance,
     Work? work,
     Connections? connections,
     Image? image,
-  ]) {
+  }) {
     var id = Uuid().v4();
     final hero = HeroModel(
       id,
