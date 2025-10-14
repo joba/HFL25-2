@@ -103,24 +103,18 @@ void viewHeroes(String sortBy, [int? limit]) async {
     print('No heroes found.');
     showMainMenu();
   } else {
-    heroes = sortHeroes(sortBy, heroes);
-    if (limit != null && limit > 0 && limit < heroes.length) {
-      heroes = heroes.sublist(0, limit);
-    }
+    heroes = heroDataManager.sortHeroes(sortBy, limit);
     print('Heroes sorted by $sortBy:');
     printHeroList(heroes);
     showFilterHeroesMenu();
   }
 }
 
-void searchHeroes() {
-  var heroes = heroDataManager.heroes;
+void searchHeroes() async {
   var searchTerm = getUserInput<String>(
     'Enter hero name to search: ',
   ).toLowerCase();
-  var results = heroes
-      .where((hero) => hero.name.toLowerCase().contains(searchTerm))
-      .toList();
+  var results = await heroDataManager.searchHeroes(searchTerm);
 
   if (results.isEmpty) {
     print('No heroes found matching "$searchTerm".');
@@ -130,44 +124,6 @@ void searchHeroes() {
   }
   showMainMenu();
 }
-
-List<HeroModel> sortHeroes(String sortBy, List<HeroModel> heroes) {
-  switch (sortBy) {
-    case 'race':
-      heroes.sort((a, b) {
-        final raceA = a.appearance?.race ?? '';
-        final raceB = b.appearance?.race ?? '';
-        return raceA.compareTo(raceB);
-      });
-      break;
-    case 'alignment':
-      heroes.sort((a, b) {
-        final alignmentA = a.biography?.alignment ?? '';
-        final alignmentB = b.biography?.alignment ?? '';
-        return alignmentA.compareTo(alignmentB);
-      });
-      break;
-    case 'gender':
-      heroes.sort((a, b) {
-        final genderA = a.appearance?.gender ?? '';
-        final genderB = b.appearance?.gender ?? '';
-        return genderA.compareTo(genderB);
-      });
-      break;
-    default:
-      heroes.sort((a, b) {
-        final strengthA = a.powerStats?.strength ?? 0;
-        final strengthB = b.powerStats?.strength ?? 0;
-        return strengthB.compareTo(strengthA);
-      });
-      break;
-  }
-  return heroes;
-}
-
-// Future<List<HeroModel>> loadHeroes() async {
-//   return await heroDataManager.loadHeroes();
-// }
 
 T getUserInput<T>(String prompt) {
   stdout.write(prompt);

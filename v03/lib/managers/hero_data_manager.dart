@@ -76,7 +76,60 @@ class HeroDataManager implements HeroDataManaging {
   }
 
   @override
+  Future<List<HeroModel>> searchHeroes(String searchTerm) async {
+    if (!_loaded) {
+      await loadHeroes();
+    }
+    return heroes
+        .where(
+          (hero) => hero.name.toLowerCase().contains(searchTerm.toLowerCase()),
+        )
+        .toList();
+  }
+
+  @override
   HeroModel parseData(Map<String, dynamic> json) {
     return HeroModel.fromJson(json);
+  }
+
+  @override
+  List<HeroModel> sortHeroes(String? sortBy, [int? limit]) {
+    var sortedList = [...heroes]; // Create a copy to avoid mutating original
+
+    switch (sortBy) {
+      case 'race':
+        sortedList.sort((a, b) {
+          final raceA = a.appearance?.race ?? '';
+          final raceB = b.appearance?.race ?? '';
+          return raceA.compareTo(raceB);
+        });
+        break;
+      case 'alignment':
+        sortedList.sort((a, b) {
+          final alignmentA = a.biography?.alignment ?? '';
+          final alignmentB = b.biography?.alignment ?? '';
+          return alignmentA.compareTo(alignmentB);
+        });
+        break;
+      case 'gender':
+        sortedList.sort((a, b) {
+          final genderA = a.appearance?.gender ?? '';
+          final genderB = b.appearance?.gender ?? '';
+          return genderA.compareTo(genderB);
+        });
+        break;
+      default: // strength
+        sortedList.sort((a, b) {
+          final strengthA = a.powerStats?.strength ?? 0;
+          final strengthB = b.powerStats?.strength ?? 0;
+          return strengthB.compareTo(strengthA);
+        });
+        break;
+    }
+
+    if (limit != null && limit > 0 && limit < sortedList.length) {
+      sortedList = sortedList.sublist(0, limit);
+    }
+    return sortedList;
   }
 }

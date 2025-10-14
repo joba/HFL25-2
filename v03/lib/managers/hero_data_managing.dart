@@ -16,4 +16,6 @@ abstract class HeroDataManaging {
     Image? image,
   });
   HeroModel parseData(Map<String, dynamic> json);
+  Future<List<HeroModel>> searchHeroes(String searchTerm);
+  List<HeroModel> sortHeroes(String? sortBy, [int? limit]);
 }
