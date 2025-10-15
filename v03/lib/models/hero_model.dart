@@ -100,14 +100,14 @@ class HeroModel {
     return HeroModel(
       json['id'],
       json['name'],
-      json['powerstats'] != null
+      json['powerStats'] != null
           ? PowerStats(
-              json['powerstats']['intelligence'] ?? 0,
-              json['powerstats']['strength'] ?? 0,
-              json['powerstats']['speed'] ?? 0,
-              json['powerstats']['durability'] ?? 0,
-              json['powerstats']['power'] ?? 0,
-              json['powerstats']['combat'] ?? 0,
+              json['powerStats']['intelligence'] ?? 0,
+              json['powerStats']['strength'] ?? 0,
+              json['powerStats']['speed'] ?? 0,
+              json['powerStats']['durability'] ?? 0,
+              json['powerStats']['power'] ?? 0,
+              json['powerStats']['combat'] ?? 0,
             )
           : null,
       json['biography'] != null
@@ -148,7 +148,7 @@ class HeroModel {
     return {
       'id': id,
       'name': name,
-      'powerstats': powerStats != null
+      'powerStats': powerStats != null
           ? {
               'intelligence': powerStats!.intelligence,
               'strength': powerStats!.strength,
