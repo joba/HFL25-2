@@ -1,0 +1,154 @@
+[
+  {
+  "id": "70",
+  "name": "Batman",
+  "powerStats": {
+    "intelligence": 100,
+    "strength": 26,
+    "speed": 27,
+    "durability": 50,
+    "power": 47,
+    "combat": 100
+  },
+  "biography": {
+    "fullName": "Bruce Wayne",
+    "alterEgos": "No alter egos found.",
+    "aliases": [
+      "Insider",
+      "Matches Malone"
+    ],
+    "placeOfBirth": "Crest Hill, Bristol Township; Gotham County",
+    "firstAppearance": "Detective Comics #27",
+    "publisher": "DC Comics",
+    "alignment": "good"
+  },
+  "appearance": {
+    "gender": "Male",
+    "race": "Human",
+    "height": [
+      "6'2",
+      "188 cm"
+    ],
+    "weight": [
+      "210 lb",
+      "95 kg"
+    ],
+    "eyeColor": "Blue",
+    "hairColor": "Black"
+  },
+  "work": {
+    "occupation": "Businessman",
+    "base": "Gotham City"
+  },
+  "connections": {
+    "groupAffiliation": "Batman Family, Batman Incorporated, Justice League, Outsiders, Wayne Enterprises.",
+    "relatives": "Damian Wayne (son), Talia al Ghul (daughter-in-law), Ra's al Ghul (father-in-law), Thomas Wayne (father, deceased), Martha Wayne (mother, deceased)"  
+  },
+  "image": {
+    "url": "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg"
+  }
+},
+{
+  "id": "69",
+  "name": "Superman",
+  "powerStats": {
+    "intelligence": 94,
+    "strength": 100,
+    "speed": 100,
+    "durability": 100,
+    "power": 100,
+    "combat": 85
+  },
+  "biography": {
+    "fullName": "Clark Kent",
+    "alterEgos": "No alter egos found.",
+    "aliases": [
+      "Kal-El",
+      "The Man of Steel",
+      "The Man of Tomorrow",
+      "The Last Son of Krypton",
+      "Big Blue",
+      "The Metropolis Marvel",
+      "The Action Ace"
+    ],
+    "placeOfBirth": "Krypton",
+    "firstAppearance": "Action Comics #1",
+    "publisher": "DC Comics",
+    "alignment": "good"
+  },
+  "appearance": {
+    "gender": "Male",
+    "race": "Kryptonian",
+    "height": [
+      "6'3",
+      "191 cm"
+    ],
+    "weight": [
+      "225 lb",
+      "102 kg"
+    ],
+    "eyeColor": "Blue",
+    "hairColor": "Black"
+  },
+  "work": {
+    "occupation": "Reporter",
+    "base": "Metropolis"
+  },
+  "connections": {
+    "groupAffiliation": "Justice League of America, Superman Family, Intergang, formerly the Legion of Super-Heroes",
+    "relatives": "Kara Zor-El (Supergirl, cousin), Kal-L (Earth-Two Superman, cousin), Kon-El (Superboy, clone), Jonathan Kent (son, deceased), Martha Kent (adoptive mother), Jonathan Kent (adoptive father, deceased)"
+  },
+  "image": {
+    "url": "https://www.superherodb.com/pictures2/portraits/10/100/791.jpg"
+  }
+},
+{
+  "id": "38",
+  "name": "Green Lantern",
+  "powerStats": {
+    "intelligence": 90,
+    "strength": 90,
+    "speed": 100,
+    "durability": 64,
+    "power": 100,
+    "combat": 70
+  },
+  "biography": {
+    "fullName": "Hal Jordan",
+    "alterEgos": "No alter egos found.",
+    "aliases": [
+      "Parallax",
+      "The Emerald Knight"
+    ],
+    "placeOfBirth": "Coast City",
+    "firstAppearance": "Showcase #22",
+    "publisher": "DC Comics",
+    "alignment": "good"
+  },
+  "appearance": {
+    "gender": "Male",
+    "race": "Human",
+    "height": [
+      "6'2",
+      "188 cm"
+    ],
+    "weight": [
+      "210 lb",
+      "95 kg"
+    ],
+    "eyeColor": "Green",
+    "hairColor": "Black"
+  },
+  "work": {
+    "occupation": "Test pilot",
+    "base": "Coast City; formerly Oa"
+  },
+  "connections": {
+    "groupAffiliation": "Green Lantern Corps, Justice League, Sinestro Corps (formerly), Red Lantern Corps (formerly)",
+    "relatives": "Jack Jordan (father, deceased), Jessica Jordan (mother, deceased), Heather Jordan (sister), Jim Jordan (brother)"
+  },
+  "image": {
+    "url": "https://www.superherodb.com/pictures2/portraits/10/100/697.jpg"
+  }
+}
+]
