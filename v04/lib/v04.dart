@@ -1,30 +1,28 @@
 import 'dart:io';
 
-import 'package:v04/managers/hero_data_manager.dart';
+import 'package:v04/firebase_config.dart';
+import 'package:v04/managers/firestore_hero_data_manager.dart';
 import 'package:v04/models/hero_model.dart';
 
-final heroDataManager = HeroDataManager();
+final heroDataManager = FirestoreHeroDataManager();
 
 void showMainMenu() {
+  FirebaseConfig.initialize();
   print('\nWelcome, make your choice below:');
-  print('1. Add Hero');
-  print('2. View Heroes');
-  print('3. Search Heroes');
-  print('4. Exit');
+  print('1. View Heroes');
+  print('2. Search Heroes');
+  print('3. Exit');
   var menuItem = stdin.readLineSync();
 
   print('\nYou selected: $menuItem\n');
   switch (menuItem) {
     case '1':
-      addNewHero();
-      break;
-    case '2':
       viewHeroes('strength');
       break;
-    case '3':
+    case '2':
       searchHeroes();
       break;
-    case '4':
+    case '3':
       print('Goodbye for now!');
       exit(0);
     default:
@@ -62,38 +60,6 @@ void showFilterHeroesMenu() {
       print('Invalid option. Please try again.');
       showFilterHeroesMenu();
   }
-}
-
-void addNewHero() async {
-  var name = getUserInput<String>('Enter hero name: ');
-  var strength = getUserInput<int>('Enter hero strength (number): ');
-  var gender = getUserInput<String>('Enter hero gender: ');
-  var race = getUserInput<String>('Enter hero race: ');
-  var alignment = getUserInput<String>('Enter hero alignment (good, evil): ');
-
-  // TODO: not pretty, use named parameters instead(?). Make more options optional?
-  PowerStats powerStats = PowerStats(0, strength, 0, 0, 0, 0);
-  Biography biography = Biography(
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    alignment,
-  );
-  Appearance appearance = Appearance(gender, race, null, null, null, null);
-
-  var newHero = heroDataManager.createHero(
-    name: name,
-    powerStats: powerStats,
-    biography: biography,
-    appearance: appearance,
-  );
-  await heroDataManager.saveHero(newHero);
-
-  print('Hero ${newHero.name} successfully added!\n');
-  showMainMenu();
 }
 
 void viewHeroes(String sortBy, [int? limit]) async {
