@@ -30,8 +30,8 @@ void main() {
       final sortedHeroes = manager.sortHeroes('strength', 3);
       expect(sortedHeroes.length, lessThanOrEqualTo(3));
       expect(
-        sortedHeroes.first.powerStats?.strength,
-        greaterThanOrEqualTo(sortedHeroes.last.powerStats?.strength ?? 0),
+        sortedHeroes.first.powerstats?.strength,
+        greaterThanOrEqualTo(sortedHeroes.last.powerstats?.strength ?? 0),
       );
     });
   });

@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:v04/firebase_config.dart';
+import 'package:v04/managers/api_manager.dart';
 import 'package:v04/managers/firestore_hero_data_manager.dart';
 import 'package:v04/models/hero_model.dart';
 
 final heroDataManager = FirestoreHeroDataManager();
+final apiManager = ApiManager();
 
 void showMainMenu() {
   FirebaseConfig.initialize();
@@ -80,15 +82,31 @@ void searchHeroes() async {
   var searchTerm = getUserInput<String>(
     'Enter hero name to search: ',
   ).toLowerCase();
-  var results = await heroDataManager.searchHeroes(searchTerm);
+  var apiResponse = await apiManager.searchHeroes(searchTerm);
 
-  if (results.isEmpty) {
+  if (apiResponse.response != 'success' || apiResponse.results.isEmpty) {
     print('No heroes found matching "$searchTerm".');
+    showMainMenu();
   } else {
-    print('Search results:');
-    printHeroList(results);
+    print('Results for "$searchTerm":');
+    printHeroList(apiResponse.results);
+
+    var saveHeroId = getUserInput<String>(
+      'Enter the ID of the hero you want to save (or press Enter to skip): ',
+    );
+    if (saveHeroId.isNotEmpty) {
+      var heroToSave = apiResponse.results.firstWhere(
+        (hero) => hero.id == saveHeroId,
+      );
+      if (heroToSave.id.isNotEmpty) {
+        await heroDataManager.saveHero(heroToSave);
+        print('Hero "${heroToSave.name}" saved successfully.');
+      } else {
+        print('Hero with ID "$saveHeroId" not found in the search results.');
+      }
+    }
+    showMainMenu();
   }
-  showMainMenu();
 }
 
 T getUserInput<T>(String prompt) {
@@ -108,5 +126,5 @@ void printHeroList(List<HeroModel> heroes) {
 }
 
 String toString(HeroModel hero) {
-  return '${hero.id}: ${hero.name} (${hero.appearance?.gender}, ${hero.appearance?.race}), strength: ${hero.powerStats?.strength}, alignment: ${hero.biography?.alignment}';
+  return '${hero.id}: ${hero.name} (${hero.appearance?.gender}, ${hero.appearance?.race}), strength: ${hero.powerstats?.strength}, alignment: ${hero.biography?.alignment}';
 }

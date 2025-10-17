@@ -24,10 +24,16 @@ class FirestoreHeroDataManager implements HeroDataManaging {
   Future<void> saveHero(HeroModel hero) async {
     try {
       final url = '$_baseUrl/$_collectionName/${hero.id}?key=$_apiKey';
+
+      // Firestore REST API expects the document to be wrapped in a "fields" object
+      final firestoreDocument = {
+        'fields': _convertToFirestoreFormat(hero.toJson()),
+      };
+
       final response = await http.patch(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(_convertToFirestoreFormat(hero.toJson())),
+        body: jsonEncode(firestoreDocument),
       );
 
       if (response.statusCode != 200) {
@@ -149,8 +155,8 @@ class FirestoreHeroDataManager implements HeroDataManaging {
         break;
       default: // strength
         sortedList.sort((a, b) {
-          final strengthA = a.powerStats?.strength ?? 0;
-          final strengthB = b.powerStats?.strength ?? 0;
+          final strengthA = a.powerstats?.strength ?? '';
+          final strengthB = b.powerstats?.strength ?? '';
           return strengthB.compareTo(strengthA);
         });
         break;
@@ -194,7 +200,6 @@ class FirestoreHeroDataManager implements HeroDataManaging {
   /// Convert regular JSON to Firestore format
   Map<String, dynamic> _convertToFirestoreFormat(Map<String, dynamic> json) {
     Map<String, dynamic> firestoreDoc = {};
-
     json.forEach((key, value) {
       // Skip the 'id' field as it's handled by Firestore document ID
       if (key == 'id' || value == null) return;

@@ -1,12 +1,12 @@
-class PowerStats {
-  final int? intelligence;
-  final int? strength;
-  final int? speed;
-  final int? durability;
-  final int? power;
-  final int? combat;
+class Powerstats {
+  final String? intelligence;
+  final String? strength;
+  final String? speed;
+  final String? durability;
+  final String? power;
+  final String? combat;
 
-  PowerStats(
+  Powerstats(
     this.intelligence,
     this.strength,
     this.speed,
@@ -77,7 +77,7 @@ class Image {
 class HeroModel {
   final String id;
   final String name;
-  final PowerStats? powerStats;
+  final Powerstats? powerstats;
   final Biography? biography;
   final Appearance? appearance;
   final Work? work;
@@ -87,7 +87,7 @@ class HeroModel {
   HeroModel(
     this.id,
     this.name,
-    this.powerStats,
+    this.powerstats,
     this.biography,
     this.appearance,
     this.work,
@@ -100,14 +100,14 @@ class HeroModel {
     return HeroModel(
       json['id'],
       json['name'],
-      json['powerStats'] != null
-          ? PowerStats(
-              json['powerStats']['intelligence'] ?? 0,
-              json['powerStats']['strength'] ?? 0,
-              json['powerStats']['speed'] ?? 0,
-              json['powerStats']['durability'] ?? 0,
-              json['powerStats']['power'] ?? 0,
-              json['powerStats']['combat'] ?? 0,
+      json['powerstats'] != null
+          ? Powerstats(
+              json['powerstats']['intelligence'] ?? 0,
+              json['powerstats']['strength'] ?? 0,
+              json['powerstats']['speed'] ?? 0,
+              json['powerstats']['durability'] ?? 0,
+              json['powerstats']['power'] ?? 0,
+              json['powerstats']['combat'] ?? 0,
             )
           : null,
       json['biography'] != null
@@ -148,14 +148,14 @@ class HeroModel {
     return {
       'id': id,
       'name': name,
-      'powerStats': powerStats != null
+      'powerstats': powerstats != null
           ? {
-              'intelligence': powerStats!.intelligence,
-              'strength': powerStats!.strength,
-              'speed': powerStats!.speed,
-              'durability': powerStats!.durability,
-              'power': powerStats!.power,
-              'combat': powerStats!.combat,
+              'intelligence': powerstats!.intelligence,
+              'strength': powerstats!.strength,
+              'speed': powerstats!.speed,
+              'durability': powerstats!.durability,
+              'power': powerstats!.power,
+              'combat': powerstats!.combat,
             }
           : null,
       'biography': biography != null
