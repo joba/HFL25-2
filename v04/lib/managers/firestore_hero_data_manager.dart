@@ -110,6 +110,7 @@ class FirestoreHeroDataManager implements HeroDataManaging {
     }
   }
 
+  // Search in local saved heroes, not used now - saved for reference
   @override
   Future<List<HeroModel>> searchHeroes(String searchTerm) async {
     if (!_loaded) {
@@ -155,8 +156,8 @@ class FirestoreHeroDataManager implements HeroDataManaging {
         break;
       default: // strength
         sortedList.sort((a, b) {
-          final strengthA = a.powerstats?.strength ?? '';
-          final strengthB = b.powerstats?.strength ?? '';
+          final strengthA = int.tryParse(a.powerstats?.strength ?? '0') ?? 0;
+          final strengthB = int.tryParse(b.powerstats?.strength ?? '0') ?? 0;
           return strengthB.compareTo(strengthA);
         });
         break;

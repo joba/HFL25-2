@@ -85,14 +85,14 @@ void searchHeroes() async {
   var apiResponse = await apiManager.searchHeroes(searchTerm);
 
   if (apiResponse.response != 'success' || apiResponse.results.isEmpty) {
-    print('No heroes found matching "$searchTerm".');
+    print('\nNo heroes found matching "$searchTerm".');
     showMainMenu();
   } else {
-    print('Results for "$searchTerm":');
+    print('\nResults for "$searchTerm":');
     printHeroList(apiResponse.results);
 
     var saveHeroId = getUserInput<String>(
-      'Enter the ID of the hero you want to save (or press Enter to skip): ',
+      '\nEnter the ID of the hero you want to save (or press Enter to skip): ',
     );
     if (saveHeroId.isNotEmpty) {
       var heroToSave = apiResponse.results.firstWhere(
