@@ -102,12 +102,12 @@ class HeroModel {
       json['name'],
       json['powerstats'] != null
           ? Powerstats(
-              json['powerstats']['intelligence'] ?? 0,
-              json['powerstats']['strength'] ?? 0,
-              json['powerstats']['speed'] ?? 0,
-              json['powerstats']['durability'] ?? 0,
-              json['powerstats']['power'] ?? 0,
-              json['powerstats']['combat'] ?? 0,
+              json['powerstats']['intelligence'] ?? '0',
+              json['powerstats']['strength'] ?? '0',
+              json['powerstats']['speed'] ?? '0',
+              json['powerstats']['durability'] ?? '0',
+              json['powerstats']['power'] ?? '0',
+              json['powerstats']['combat'] ?? '0',
             )
           : null,
       json['biography'] != null

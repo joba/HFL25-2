@@ -3,12 +3,12 @@
   "id": "70",
   "name": "Batman",
   "powerstats": {
-    "intelligence": 100,
-    "strength": 26,
-    "speed": 27,
-    "durability": 50,
-    "power": 47,
-    "combat": 100
+    "intelligence": "100",
+    "strength": "26",
+    "speed": "27",
+    "durability": "50",
+    "power": "47",
+    "combat": "100"
   },
   "biography": {
     "fullName": "Bruce Wayne",
@@ -52,12 +52,12 @@
   "id": "69",
   "name": "Superman",
   "powerstats": {
-    "intelligence": 94,
-    "strength": 100,
-    "speed": 100,
-    "durability": 100,
-    "power": 100,
-    "combat": 85
+    "intelligence": "94",
+    "strength": "100",
+    "speed": "100",
+    "durability": "100",
+    "power": "100",
+    "combat": "85"
   },
   "biography": {
     "fullName": "Clark Kent",
@@ -106,12 +106,12 @@
   "id": "38",
   "name": "Green Lantern",
   "powerstats": {
-    "intelligence": 90,
-    "strength": 90,
-    "speed": 100,
-    "durability": 64,
-    "power": 100,
-    "combat": 70
+    "intelligence": "90",
+    "strength": "90",
+    "speed": "100",
+    "durability": "64",
+    "power": "100",
+    "combat": "70"
   },
   "biography": {
     "fullName": "Hal Jordan",
