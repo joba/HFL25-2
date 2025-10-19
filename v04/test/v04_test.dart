@@ -69,7 +69,8 @@ void main() {
         // Verify we can load data (assuming some test data exists)
         expect(manager.heroes, isA<List<HeroModel>>());
       },
-      // skip: 'Integration test - requires Firestore setup',
+      skip:
+          'Integration test - requires Firestore setup (works locally but not in CI)',
     );
 
     test(
@@ -102,7 +103,8 @@ void main() {
         // Cleanup - delete test hero
         await manager.deleteHero('test-id');
       },
-      // skip: 'Integration test - requires Firestore setup',
+      skip:
+          'Integration test - requires Firestore setup (works locally but not in CI)',
     );
   });
 }
