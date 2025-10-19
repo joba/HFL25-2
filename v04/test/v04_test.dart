@@ -51,64 +51,64 @@ void main() {
     });
   });
 
-  group('Integration Tests (Real Database)', () {
-    // These tests would actually connect to Firestore
+  // group('Integration Tests (Real Database)', () {
+  //   // These tests would actually connect to Firestore
 
-    late FirestoreHeroDataManager manager;
+  //   late FirestoreHeroDataManager manager;
 
-    setUpAll(() {
-      FirebaseConfig.initialize();
-    });
+  //   setUpAll(() {
+  //     FirebaseConfig.initialize();
+  //   });
 
-    setUp(() {
-      manager = FirestoreHeroDataManager();
-    });
+  //   setUp(() {
+  //     manager = FirestoreHeroDataManager();
+  //   });
 
-    test(
-      'should load heroes from actual Firestore',
-      () async {
-        // This would make a real HTTP call to Firestore
-        await manager.loadHeroes();
+  //   test(
+  //     'should load heroes from actual Firestore',
+  //     () async {
+  //       // This would make a real HTTP call to Firestore
+  //       await manager.loadHeroes();
 
-        // Verify we can load data (assuming some test data exists)
-        expect(manager.heroes, isA<List<HeroModel>>());
-      },
-      skip:
-          'Integration test - requires Firestore setup (works locally but not in CI)',
-    );
+  //       // Verify we can load data (assuming some test data exists)
+  //       expect(manager.heroes, isA<List<HeroModel>>());
+  //     },
+  //     skip:
+  //         'Integration test - requires Firestore setup (works locally but not in CI)',
+  //   );
 
-    test(
-      'should save and retrieve hero from actual Firestore',
-      () async {
-        // Create test hero
-        final testHero = HeroModel(
-          'test-id',
-          'Test Hero',
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-        );
+  //   test(
+  //     'should save and retrieve hero from actual Firestore',
+  //     () async {
+  //       // Create test hero
+  //       final testHero = HeroModel(
+  //         'test-id',
+  //         'Test Hero',
+  //         null,
+  //         null,
+  //         null,
+  //         null,
+  //         null,
+  //         null,
+  //       );
 
-        // Save to Firestore
-        await manager.saveHero(testHero);
+  //       // Save to Firestore
+  //       await manager.saveHero(testHero);
 
-        // Clear local cache and reload
-        manager.heroes.clear();
-        await manager.refreshFromFirestore();
+  //       // Clear local cache and reload
+  //       manager.heroes.clear();
+  //       await manager.refreshFromFirestore();
 
-        // Verify it was saved and loaded
-        final found = manager.heroes.where((h) => h.id == 'test-id').toList();
-        expect(found.length, 1);
-        expect(found.first.name, 'Test Hero');
+  //       // Verify it was saved and loaded
+  //       final found = manager.heroes.where((h) => h.id == 'test-id').toList();
+  //       expect(found.length, 1);
+  //       expect(found.first.name, 'Test Hero');
 
-        // Cleanup - delete test hero
-        await manager.deleteHero('test-id');
-      },
-      skip:
-          'Integration test - requires Firestore setup (works locally but not in CI)',
-    );
-  });
+  //       // Cleanup - delete test hero
+  //       await manager.deleteHero('test-id');
+  //     },
+  //     skip:
+  //         'Integration test - requires Firestore setup (works locally but not in CI)',
+  //   );
+  // });
 }
