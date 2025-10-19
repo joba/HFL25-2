@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cli_spin/cli_spin.dart';
 import 'package:v04/firebase_config.dart';
 import 'package:v04/managers/api_manager.dart';
 import 'package:v04/managers/firestore_hero_data_manager.dart';
@@ -7,6 +8,18 @@ import 'package:v04/models/hero_model.dart';
 
 final heroDataManager = FirestoreHeroDataManager();
 final apiManager = ApiManager();
+
+final spinnerLoading = CliSpin(
+  text: 'Loading heroes...',
+  spinner: CliSpinners.dots2,
+  color: CliSpinnerColor.green,
+);
+
+final spinnerSaving = CliSpin(
+  text: 'Saving hero...',
+  spinner: CliSpinners.dots3,
+  color: CliSpinnerColor.cyan,
+);
 
 void showMainMenu() {
   FirebaseConfig.initialize();
@@ -82,8 +95,9 @@ void searchHeroes() async {
   var searchTerm = getUserInput<String>(
     'Enter hero name to search: ',
   ).toLowerCase();
+  spinnerLoading.start();
   var apiResponse = await apiManager.searchHeroes(searchTerm);
-
+  spinnerLoading.stop();
   if (apiResponse.response != 'success' || apiResponse.results.isEmpty) {
     print('\nNo heroes found matching "$searchTerm".');
     showMainMenu();
@@ -99,7 +113,9 @@ void searchHeroes() async {
         (hero) => hero.id == saveHeroId,
       );
       if (heroToSave.id.isNotEmpty) {
+        spinnerSaving.start();
         await heroDataManager.saveHero(heroToSave);
+        spinnerSaving.stop();
         print('Hero "${heroToSave.name}" saved successfully.');
       } else {
         print('Hero with ID "$saveHeroId" not found in the search results.');
