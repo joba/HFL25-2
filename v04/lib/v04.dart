@@ -10,7 +10,7 @@ final heroDataManager = FirestoreHeroDataManager();
 final apiManager = ApiManager();
 
 final spinnerLoading = CliSpin(
-  text: 'Loading heroes...',
+  text: 'Loading...',
   spinner: CliSpinners.dots2,
   color: CliSpinnerColor.green,
 );
@@ -52,7 +52,8 @@ void showFilterHeroesMenu() {
   print('2. Sort heroes by race');
   print('3. Sort heroes by alignment');
   print('4. Sort heroes by gender');
-  print('5. Back to main menu');
+  print('5. Delete a hero');
+  print('6. Back to main menu');
   var filterOption = stdin.readLineSync();
 
   switch (filterOption) {
@@ -69,6 +70,9 @@ void showFilterHeroesMenu() {
       viewHeroes('gender');
       break;
     case '5':
+      deleteHero();
+      break;
+    case '6':
       showMainMenu();
       break;
     default:
@@ -123,6 +127,15 @@ void searchHeroes() async {
     }
     showMainMenu();
   }
+}
+
+void deleteHero() async {
+  var heroId = getUserInput<String>('Enter the ID of the hero to delete: ');
+  spinnerLoading.start();
+  await heroDataManager.deleteHero(heroId);
+  spinnerLoading.stop();
+  print('\nHero with ID "$heroId" deleted successfully.');
+  showMainMenu();
 }
 
 T getUserInput<T>(String prompt) {
