@@ -88,6 +88,7 @@ void viewHeroes(String sortBy, [int? limit]) async {
     print('No heroes found.');
     showMainMenu();
   } else {
+    await heroDataManager.addAsciiArtToHeroImages();
     heroes = heroDataManager.sortHeroes(sortBy, limit);
     print('Heroes sorted by $sortBy:');
     printHeroList(heroes);
@@ -119,6 +120,12 @@ void searchHeroes() async {
       if (heroToSave.id.isNotEmpty) {
         spinnerSaving.start();
         await heroDataManager.saveHero(heroToSave);
+        if (heroToSave.image != null && heroToSave.image!.url.isNotEmpty) {
+          await apiManager.downloadHeroImageIfNeeded(
+            heroToSave.image!.url,
+            heroToSave.id,
+          );
+        }
         spinnerSaving.stop();
         print('Hero "${heroToSave.name}" saved successfully.');
       } else {
@@ -155,5 +162,5 @@ void printHeroList(List<HeroModel> heroes) {
 }
 
 String toString(HeroModel hero) {
-  return '${hero.id}: ${hero.name} (${hero.appearance?.gender}, ${hero.appearance?.race}), strength: ${hero.powerstats?.strength}, alignment: ${hero.biography?.alignment}';
+  return '${hero.image?.asciiArt}\n${hero.id}: ${hero.name} (${hero.appearance?.gender}, ${hero.appearance?.race}), strength: ${hero.powerstats?.strength}, alignment: ${hero.biography?.alignment}';
 }
