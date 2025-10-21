@@ -50,11 +50,12 @@ void showMainMenu() {
 void showFilterHeroesMenu() {
   print('\nFilter and sort heroes:');
   print('1. Show top 3 strongest heroes');
-  print('2. Sort heroes by race');
-  print('3. Sort heroes by alignment');
-  print('4. Sort heroes by gender');
-  print('5. Delete a hero');
-  print('6. Back to main menu');
+  print('2. Show only heroes');
+  print('3. Show only villains');
+  print('4. Sort heroes by race');
+  print('5. Sort heroes by gender');
+  print('6. Delete a hero');
+  print('7. Back to main menu');
   var filterOption = stdin.readLineSync();
 
   switch (filterOption) {
@@ -62,23 +63,40 @@ void showFilterHeroesMenu() {
       viewHeroes('strength', 3);
       break;
     case '2':
-      viewHeroes('race');
+      filterHeroes('alignment', 'good');
       break;
     case '3':
-      viewHeroes('alignment');
+      filterHeroes('alignment', 'bad');
       break;
     case '4':
-      viewHeroes('gender');
+      viewHeroes('race');
       break;
     case '5':
-      deleteHero();
+      viewHeroes('gender');
       break;
     case '6':
+      deleteHero();
+      break;
+    case '7':
       showMainMenu();
       break;
     default:
       print('Invalid option. Please try again.');
       showFilterHeroesMenu();
+  }
+}
+
+void filterHeroes(String filterBy, String filterValue) async {
+  await heroDataManager.loadHeroes();
+  var heroes = heroDataManager.filterHeroes(filterBy, filterValue);
+  if (heroes.isEmpty) {
+    print('No heroes found for $filterBy: $filterValue.');
+    showMainMenu();
+  } else {
+    await heroDataManager.addAsciiArtToHeroImages();
+    print('Heroes filtered by $filterBy: $filterValue:');
+    printHeroList(heroes);
+    showFilterHeroesMenu();
   }
 }
 

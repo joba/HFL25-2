@@ -171,6 +171,23 @@ class FirestoreHeroDataManager implements HeroDataManaging {
     return sortedList;
   }
 
+  @override
+  List<HeroModel> filterHeroes(String? filterBy, String? filterValue) {
+    if (filterBy == null || filterValue == null || filterValue.isEmpty) {
+      return [...heroes];
+    }
+
+    // This can be used to filter more values
+    switch (filterBy.toLowerCase()) {
+      case 'alignment':
+        return heroes
+            .where((hero) => hero.biography?.alignment == filterValue)
+            .toList();
+      default:
+        return [...heroes];
+    }
+  }
+
   /// Delete a hero from Firestore
   Future<void> deleteHero(String heroId) async {
     try {
@@ -292,7 +309,7 @@ class FirestoreHeroDataManager implements HeroDataManaging {
     final image = File(filePath);
     final imageBytes = await image.readAsBytes();
     const converter = AsciiArtConverter(
-      width: 55,
+      width: 50,
       colorMode: ColorMode.trueColor,
     );
     final art = await converter.convert(imageBytes);
