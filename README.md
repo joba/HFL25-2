@@ -11,3 +11,7 @@ A collection of heroes saved in a local json
 # V03 - HeroDex Modular
 
 Make use of abstract classes, singleton
+
+# V04 Hero Management System
+
+A command-line application for managing superhero data with Firebase Firestore integration, ASCII art generation, and advanced filtering capabilities.
