@@ -100,14 +100,23 @@ void searchHeroes() async {
   var searchTerm = getUserInput<String>(
     'Enter hero name to search: ',
   ).toLowerCase();
+  // Search local data first
+  var searchResults = await heroDataManager.searchHeroes(searchTerm);
+  if (searchResults.isEmpty) {
+    print('\nNo heroes found matching "$searchTerm" in local database.');
+  } else {
+    print('\nResults for "$searchTerm" in local database:');
+    printHeroList(searchResults);
+  }
+  print('\nSearching external API for "$searchTerm"...');
   spinnerLoading.start();
   var apiResponse = await apiManager.searchHeroes(searchTerm);
   spinnerLoading.stop();
   if (apiResponse.response != 'success' || apiResponse.results.isEmpty) {
-    print('\nNo heroes found matching "$searchTerm".');
+    print('\nNo heroes found matching "$searchTerm" in external API.');
     showMainMenu();
   } else {
-    print('\nResults for "$searchTerm":');
+    print('\nResults for "$searchTerm" in external API:');
     printHeroList(apiResponse.results);
 
     var saveHeroId = getUserInput<String>(
@@ -157,10 +166,13 @@ T getUserInput<T>(String prompt) {
 
 void printHeroList(List<HeroModel> heroes) {
   for (var hero in heroes) {
+    if (hero.image?.asciiArt != '') {
+      print('\n${hero.image!.asciiArt}');
+    }
     print(toString(hero));
   }
 }
 
 String toString(HeroModel hero) {
-  return '${hero.image?.asciiArt}\n${hero.id}: ${hero.name} (${hero.appearance?.gender}, ${hero.appearance?.race}), strength: ${hero.powerstats?.strength}, alignment: ${hero.biography?.alignment}';
+  return '${hero.id}: ${hero.name} (${hero.appearance?.gender}, ${hero.appearance?.race}), strength: ${hero.powerstats?.strength}, alignment: ${hero.biography?.alignment}';
 }
