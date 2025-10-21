@@ -292,7 +292,7 @@ class FirestoreHeroDataManager implements HeroDataManaging {
     final image = File(filePath);
     final imageBytes = await image.readAsBytes();
     const converter = AsciiArtConverter(
-      width: 40,
+      width: 55,
       colorMode: ColorMode.trueColor,
     );
     final art = await converter.convert(imageBytes);
