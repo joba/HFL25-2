@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cli_spin/cli_spin.dart';
+import 'package:cli_table/cli_table.dart';
 import 'package:v04/firebase_config.dart';
 import 'package:v04/managers/api_manager.dart';
 import 'package:v04/managers/firestore_hero_data_manager.dart';
@@ -167,9 +168,31 @@ T getUserInput<T>(String prompt) {
 void printHeroList(List<HeroModel> heroes) {
   for (var hero in heroes) {
     if (hero.image?.asciiArt != '') {
-      print('\n${hero.image!.asciiArt}');
+      final table = Table(
+        header: [
+          {
+            'content':
+                '${hero.id}: ${hero.name} (${hero.appearance?.gender}, ${hero.appearance?.race})',
+            'colSpan': 2,
+          },
+        ],
+      );
+      table.add([
+        {'colSpan': 2, 'content': hero.image!.asciiArt},
+      ]);
+      table.add([
+        hero.powerstats?.strength != null
+            ? 'Strength: ${hero.powerstats!.strength}'
+            : 'Strength: N/A',
+        hero.biography?.alignment != null
+            ? 'Alignment: ${hero.biography!.alignment}'
+            : 'Alignment: N/A',
+      ]);
+
+      print(table.toString());
+    } else {
+      print(toString(hero));
     }
-    print(toString(hero));
   }
 }
 
