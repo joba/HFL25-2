@@ -112,7 +112,7 @@ class FirestoreHeroDataManager implements HeroDataManaging {
     }
   }
 
-  // Search in local saved heroes, not used now - saved for reference
+  // Search in local saved heroes
   @override
   Future<List<HeroModel>> searchHeroes(String searchTerm) async {
     if (!_loaded) {

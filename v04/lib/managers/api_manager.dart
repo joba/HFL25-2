@@ -16,7 +16,7 @@ class ApiManager {
   factory ApiManager() => _instance;
 
   final String _baseUrl = 'https://superheroapi.com/api';
-  final String _apiKey = env['API_KEY'] ?? '';
+  final String _apiKey = env['SUPERHERO_API_KEY'] ?? '';
 
   Future<http.Response> fetchHeroById(String id) async {
     final url = '$_baseUrl/$_apiKey/$id';
