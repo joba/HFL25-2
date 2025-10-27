@@ -4,10 +4,12 @@ import 'package:cli_spin/cli_spin.dart';
 import 'package:cli_table/cli_table.dart';
 import 'package:v04/managers/api_manager.dart';
 import 'package:v04/managers/firestore_hero_data_manager.dart';
+import 'package:v04/managers/image_manager.dart';
 import 'package:v04/models/hero_model.dart';
 
 final heroDataManager = FirestoreHeroDataManager();
 final apiManager = ApiManager();
+final imageManager = ImageManager();
 
 final spinnerLoading = CliSpin(
   text: 'Loading...',
@@ -91,7 +93,7 @@ void filterHeroes(String filterBy, String filterValue) async {
     print('No heroes found for $filterBy: $filterValue.');
     showMainMenu();
   } else {
-    await heroDataManager.addAsciiArtToHeroImages();
+    await imageManager.addAsciiArtToHeroImages(heroes);
     print('Heroes filtered by $filterBy: $filterValue:');
     printHeroList(heroes);
     showFilterHeroesMenu();
@@ -105,7 +107,7 @@ void viewHeroes(String sortBy, [int? limit]) async {
     print('No heroes found.');
     showMainMenu();
   } else {
-    await heroDataManager.addAsciiArtToHeroImages();
+    await imageManager.addAsciiArtToHeroImages(heroes);
     heroes = heroDataManager.sortHeroes(sortBy, limit);
     print('Heroes sorted by $sortBy:');
     printHeroList(heroes);
