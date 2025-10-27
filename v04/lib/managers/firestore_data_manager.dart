@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:v04/firebase_config.dart';
 import 'package:v04/managers/hero_data_managing.dart';
+import 'package:v04/managers/data_manager.dart';
 import 'package:v04/models/hero_model.dart';
 
 class FirestoreDataManager implements HeroDataManaging {
@@ -13,6 +14,9 @@ class FirestoreDataManager implements HeroDataManaging {
 
   final String _collectionName = 'heroes';
   bool _loaded = false;
+
+  // Delegate business logic operations to DataManager
+  final DataManager _dataManager = DataManager();
 
   @override
   List<HeroModel> heroes = [];
@@ -110,17 +114,13 @@ class FirestoreDataManager implements HeroDataManaging {
     }
   }
 
-  // Search in local saved heroes
+  // Search in local saved heroes - delegates to DataManager
   @override
   Future<List<HeroModel>> searchHeroes(String searchTerm) async {
     if (!_loaded) {
       await loadHeroes();
     }
-    return heroes
-        .where(
-          (hero) => hero.name.toLowerCase().contains(searchTerm.toLowerCase()),
-        )
-        .toList();
+    return _dataManager.searchHeroes(heroes, searchTerm);
   }
 
   @override
@@ -128,65 +128,19 @@ class FirestoreDataManager implements HeroDataManaging {
     return HeroModel.fromJson(json);
   }
 
+  // Delegate sorting to DataManager
   @override
   List<HeroModel> sortHeroes(String? sortBy, [int? limit]) {
-    var sortedList = [...heroes]; // Create a copy to avoid mutating original
-
-    switch (sortBy) {
-      case 'race':
-        sortedList.sort((a, b) {
-          final raceA = a.appearance?.race ?? '';
-          final raceB = b.appearance?.race ?? '';
-          return raceA.compareTo(raceB);
-        });
-        break;
-      case 'alignment':
-        sortedList.sort((a, b) {
-          final alignmentA = a.biography?.alignment ?? '';
-          final alignmentB = b.biography?.alignment ?? '';
-          return alignmentA.compareTo(alignmentB);
-        });
-        break;
-      case 'gender':
-        sortedList.sort((a, b) {
-          final genderA = a.appearance?.gender ?? '';
-          final genderB = b.appearance?.gender ?? '';
-          return genderA.compareTo(genderB);
-        });
-        break;
-      default: // strength
-        sortedList.sort((a, b) {
-          final strengthA = int.tryParse(a.powerstats?.strength ?? '0') ?? 0;
-          final strengthB = int.tryParse(b.powerstats?.strength ?? '0') ?? 0;
-          return strengthB.compareTo(strengthA);
-        });
-        break;
-    }
-
-    if (limit != null && limit > 0 && limit < sortedList.length) {
-      sortedList = sortedList.sublist(0, limit);
-    }
-    return sortedList;
+    return _dataManager.sortHeroes(heroes, sortBy, limit);
   }
 
+  // Delegate filtering to DataManager
   @override
   List<HeroModel> filterHeroes(String? filterBy, String? filterValue) {
-    if (filterBy == null || filterValue == null || filterValue.isEmpty) {
-      return [...heroes];
-    }
-
-    // This can be used to filter more values
-    switch (filterBy.toLowerCase()) {
-      case 'alignment':
-        return heroes
-            .where((hero) => hero.biography?.alignment == filterValue)
-            .toList();
-      default:
-        return [...heroes];
-    }
+    return _dataManager.filterHeroes(heroes, filterBy, filterValue);
   }
 
-  /// Delete a hero from Firestore
+  // Delete a hero from Firestore
   Future<void> deleteHero(String heroId) async {
     try {
       final url = '$_baseUrl/$_collectionName/$heroId?key=$_apiKey';
@@ -204,7 +158,7 @@ class FirestoreDataManager implements HeroDataManaging {
     }
   }
 
-  /// Convert regular JSON to Firestore format
+  // Convert regular JSON to Firestore format
   Map<String, dynamic> _convertToFirestoreFormat(Map<String, dynamic> json) {
     Map<String, dynamic> firestoreDoc = {};
     json.forEach((key, value) {
@@ -237,7 +191,7 @@ class FirestoreDataManager implements HeroDataManaging {
     return firestoreDoc;
   }
 
-  /// Convert Firestore format back to regular JSON
+  // Convert Firestore format back to regular JSON
   Map<String, dynamic> _convertFromFirestoreFormat(
     Map<String, dynamic> firestoreDoc,
   ) {

@@ -30,24 +30,25 @@ The Hero Management System is a feature-rich terminal application that allows us
 ```
 v04/
 ├── lib/
-│   ├── firebase_config.dart          # Firebase configuration and initialization
-│   ├── v04.dart                      # Main application entry point and UI
+│   ├── firebase_config.dart             # Firebase configuration and initialization
+│   ├── v04.dart                         # Main application entry point and UI
 │   ├── managers/
-│   │   ├── api_manager.dart          # Remote API management
-│   │   ├── image_manager.dart        # Image download management
+│   │   ├── api_manager.dart             # Remote API management
+│   │   ├── data_manager.dart            # Handles business logic (sorting, filtering)
+│   │   ├── image_manager.dart           # Image download management
 │   │   ├── firestore_data_manager.dart  # Firebase Firestore operations
-│   │   └── hero_data_managing.dart   # Abstract interface for data management
+│   │   └── hero_data_managing.dart      # Abstract interface for data management
 │   └── models/
-│       ├── hero_model.dart           # Hero data model with all properties
-│       └── search_model.dart         # Api response model
+│       ├── hero_model.dart              # Hero data model with all properties
+│       └── search_model.dart            # Api response model
 ├── test/
-│   ├── heroes-mock.json             # Mock data for unit testing
-│   ├── v04_test.dart                # Application unit tests
-├── images/                          # Local hero image cache directory
-├── .env                             # Environment variables (not in repo)
-├── .gitignore                       # Git ignore rules
-├── pubspec.yaml                     # Dart dependencies and metadata
-└── README.md                        # This documentation
+│   ├── heroes-mock.json                 # Mock data for unit testing
+│   ├── v04_test.dart                    # Application unit tests
+├── images/                              # Local hero image cache directory
+├── .env                                 # Environment variables (not in repo)
+├── .gitignore                           # Git ignore rules
+├── pubspec.yaml                         # Dart dependencies and metadata
+└── README.md                            # This documentation
 ```
 
 ## 🛠️ Installation & Setup
