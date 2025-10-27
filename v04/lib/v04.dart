@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cli_spin/cli_spin.dart';
 import 'package:cli_table/cli_table.dart';
-import 'package:v04/firebase_config.dart';
 import 'package:v04/managers/api_manager.dart';
 import 'package:v04/managers/firestore_hero_data_manager.dart';
 import 'package:v04/models/hero_model.dart';
@@ -23,7 +22,6 @@ final spinnerSaving = CliSpin(
 );
 
 void showMainMenu() {
-  FirebaseConfig.initialize();
   print('\nWelcome, make your choice below:');
   print('1. View Heroes');
   print('2. Search Heroes');
@@ -146,16 +144,7 @@ void searchHeroes() async {
         (hero) => hero.id == saveHeroId,
       );
       if (heroToSave.id.isNotEmpty) {
-        spinnerSaving.start();
-        await heroDataManager.saveHero(heroToSave);
-        if (heroToSave.image != null && heroToSave.image!.url.isNotEmpty) {
-          await apiManager.downloadHeroImageIfNeeded(
-            heroToSave.image!.url,
-            heroToSave.id,
-          );
-        }
-        spinnerSaving.stop();
-        print('Hero "${heroToSave.name}" saved successfully.');
+        await saveHero(heroToSave);
       } else {
         print('Hero with ID "$saveHeroId" not found in the search results.');
       }
@@ -164,7 +153,28 @@ void searchHeroes() async {
   }
 }
 
-void deleteHero() async {
+Future<void> saveHero(HeroModel heroToSave) async {
+  spinnerSaving.start();
+  var result = await heroDataManager.saveHero(heroToSave);
+
+  if (result == 'success') {
+    print('Hero "${heroToSave.name}" saved successfully.');
+
+    if (heroToSave.image != null && heroToSave.image!.url.isNotEmpty) {
+      await apiManager.downloadHeroImageIfNeeded(
+        heroToSave.name,
+        heroToSave.id,
+      );
+    }
+  } else if (result == 'duplicatedEntry') {
+    print('Hero "${heroToSave.name}" already exists in the database.');
+  } else {
+    print('Failed to save hero "${heroToSave.name}".');
+  }
+  spinnerSaving.stop();
+}
+
+Future<void> deleteHero() async {
   var heroId = getUserInput<String>('Enter the ID of the hero to delete: ');
   spinnerLoading.start();
   await heroDataManager.deleteHero(heroId);

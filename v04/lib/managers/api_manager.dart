@@ -17,17 +17,8 @@ class ApiManager {
 
   final String _baseUrl = 'https://superheroapi.com/api';
   final String _apiKey = env['SUPERHERO_API_KEY'] ?? '';
-
-  Future<http.Response> fetchHeroById(String id) async {
-    final url = '$_baseUrl/$_apiKey/$id';
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode != 200) {
-      throw Exception('Failed to load hero data: ${response.body}');
-    }
-
-    return response;
-  }
+  final String _imageBaseUrl =
+      'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm';
 
   Future<SearchModel> searchHeroes(String name) async {
     final url = '$_baseUrl/$_apiKey/search/$name';
@@ -97,10 +88,7 @@ class ApiManager {
   }
 
   /// Download hero image only if it doesn't exist locally
-  Future<String?> downloadHeroImageIfNeeded(
-    String imageUrl,
-    String heroId,
-  ) async {
+  Future<String?> downloadHeroImageIfNeeded(String name, String heroId) async {
     // Check if image already exists
     final existingPath = heroDataManager.getLocalHeroImagePath(heroId);
     if (existingPath != null) {
@@ -110,6 +98,7 @@ class ApiManager {
 
     // Download if not exists
     try {
+      final imageUrl = '$_imageBaseUrl/$heroId-${name.toLowerCase()}.jpg';
       final localPath = await downloadAndSaveHeroImage(imageUrl, heroId);
       print('Downloaded new image for hero $heroId: $localPath');
       return localPath;

@@ -23,7 +23,17 @@ class FirestoreHeroDataManager implements HeroDataManaging {
   String get _apiKey => FirebaseConfig.apiKey;
 
   @override
-  Future<void> saveHero(HeroModel hero) async {
+  Future<String> saveHero(HeroModel hero) async {
+    if (!_loaded) {
+      await loadHeroes();
+    }
+
+    // Prevent duplicates
+    final existingIndex = heroes.indexWhere((h) => h.id == hero.id);
+    if (existingIndex >= 0) {
+      return 'duplicatedEntry';
+    }
+
     try {
       final url = '$_baseUrl/$_collectionName/${hero.id}?key=$_apiKey';
 
@@ -42,20 +52,10 @@ class FirestoreHeroDataManager implements HeroDataManaging {
         throw Exception('Failed to save hero: ${response.body}');
       }
 
-      if (!_loaded) {
-        await loadHeroes();
-      }
-
-      // Add to local list if not already there
-      final existingIndex = heroes.indexWhere((h) => h.id == hero.id);
-      if (existingIndex >= 0) {
-        heroes[existingIndex] = hero; // Update existing
-      } else {
-        heroes.add(hero); // Add new
-      }
+      _loaded = false;
+      return 'success';
     } catch (e) {
-      print('Error saving hero to Firestore: $e');
-      throw Exception('Failed to save hero: $e');
+      return 'error';
     }
   }
 
@@ -204,17 +204,6 @@ class FirestoreHeroDataManager implements HeroDataManaging {
       print('Error deleting hero from Firestore: $e');
       throw Exception('Failed to delete hero: $e');
     }
-  }
-
-  /// Update an existing hero
-  Future<void> updateHero(HeroModel hero) async {
-    await saveHero(hero); // Same as save for Firestore
-  }
-
-  /// Force refresh from Firestore
-  Future<void> refreshFromFirestore() async {
-    _loaded = false;
-    await loadHeroes();
   }
 
   /// Convert regular JSON to Firestore format
