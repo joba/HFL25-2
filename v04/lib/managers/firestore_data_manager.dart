@@ -141,6 +141,7 @@ class FirestoreDataManager implements HeroDataManaging {
   }
 
   // Delete a hero from Firestore
+  @override
   Future<void> deleteHero(String heroId) async {
     try {
       final url = '$_baseUrl/$_collectionName/$heroId?key=$_apiKey';
