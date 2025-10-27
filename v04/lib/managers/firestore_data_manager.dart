@@ -4,12 +4,12 @@ import 'package:v04/firebase_config.dart';
 import 'package:v04/managers/hero_data_managing.dart';
 import 'package:v04/models/hero_model.dart';
 
-class FirestoreHeroDataManager implements HeroDataManaging {
+class FirestoreDataManager implements HeroDataManaging {
   // Create a singleton instance
-  FirestoreHeroDataManager._internal();
-  static final FirestoreHeroDataManager _instance =
-      FirestoreHeroDataManager._internal();
-  factory FirestoreHeroDataManager() => _instance;
+  FirestoreDataManager._internal();
+  static final FirestoreDataManager _instance =
+      FirestoreDataManager._internal();
+  factory FirestoreDataManager() => _instance;
 
   final String _collectionName = 'heroes';
   bool _loaded = false;

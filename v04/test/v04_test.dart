@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:v04/firebase_config.dart';
-import 'package:v04/managers/firestore_hero_data_manager.dart';
+import 'package:v04/managers/firestore_data_manager.dart';
 import 'package:v04/models/hero_model.dart';
 import 'package:test/test.dart';
 
@@ -22,7 +22,7 @@ void main() {
     test(
       'Search Heroes',
       () async {
-        final manager = FirestoreHeroDataManager();
+        final manager = FirestoreDataManager();
         // Use mock data for testing
         manager.heroes = mockHeroes;
 
@@ -35,7 +35,7 @@ void main() {
     );
 
     test('List three strongest heroes', () {
-      final manager = FirestoreHeroDataManager();
+      final manager = FirestoreDataManager();
       // Use mock data for testing
       manager.heroes = mockHeroes;
 

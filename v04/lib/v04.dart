@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:cli_spin/cli_spin.dart';
 import 'package:cli_table/cli_table.dart';
 import 'package:v04/managers/api_manager.dart';
-import 'package:v04/managers/firestore_hero_data_manager.dart';
+import 'package:v04/managers/firestore_data_manager.dart';
 import 'package:v04/managers/image_manager.dart';
 import 'package:v04/models/hero_model.dart';
 
-final heroDataManager = FirestoreHeroDataManager();
+final firestoreDataManager = FirestoreDataManager();
 final apiManager = ApiManager();
 final imageManager = ImageManager();
 
@@ -87,8 +87,8 @@ void showFilterHeroesMenu() {
 }
 
 void filterHeroes(String filterBy, String filterValue) async {
-  await heroDataManager.loadHeroes();
-  var heroes = heroDataManager.filterHeroes(filterBy, filterValue);
+  await firestoreDataManager.loadHeroes();
+  var heroes = firestoreDataManager.filterHeroes(filterBy, filterValue);
   if (heroes.isEmpty) {
     print('No heroes found for $filterBy: $filterValue.');
     showMainMenu();
@@ -101,14 +101,14 @@ void filterHeroes(String filterBy, String filterValue) async {
 }
 
 void viewHeroes(String sortBy, [int? limit]) async {
-  await heroDataManager.loadHeroes();
-  var heroes = heroDataManager.heroes;
+  await firestoreDataManager.loadHeroes();
+  var heroes = firestoreDataManager.heroes;
   if (heroes.isEmpty) {
     print('No heroes found.');
     showMainMenu();
   } else {
     await imageManager.addAsciiArtToHeroImages(heroes);
-    heroes = heroDataManager.sortHeroes(sortBy, limit);
+    heroes = firestoreDataManager.sortHeroes(sortBy, limit);
     print('Heroes sorted by $sortBy:');
     printHeroList(heroes);
     showFilterHeroesMenu();
@@ -120,7 +120,7 @@ void searchHeroes() async {
     'Enter hero name to search: ',
   ).toLowerCase();
   // Search local data first
-  var searchResults = await heroDataManager.searchHeroes(searchTerm);
+  var searchResults = await firestoreDataManager.searchHeroes(searchTerm);
   if (searchResults.isEmpty) {
     print('\nNo heroes found matching "$searchTerm" in local database.');
   } else {
@@ -157,7 +157,7 @@ void searchHeroes() async {
 
 Future<void> saveHero(HeroModel heroToSave) async {
   spinnerSaving.start();
-  var result = await heroDataManager.saveHero(heroToSave);
+  var result = await firestoreDataManager.saveHero(heroToSave);
 
   if (result == 'success') {
     print('Hero "${heroToSave.name}" saved successfully.');
@@ -179,7 +179,7 @@ Future<void> saveHero(HeroModel heroToSave) async {
 Future<void> deleteHero() async {
   var heroId = getUserInput<String>('Enter the ID of the hero to delete: ');
   spinnerLoading.start();
-  await heroDataManager.deleteHero(heroId);
+  await firestoreDataManager.deleteHero(heroId);
   spinnerLoading.stop();
   print('\nHero with ID "$heroId" deleted successfully.');
   showMainMenu();

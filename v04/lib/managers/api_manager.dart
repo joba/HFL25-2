@@ -3,12 +3,12 @@ import 'dart:io';
 
 import 'package:dotenv/dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:v04/managers/firestore_hero_data_manager.dart';
+import 'package:v04/managers/firestore_data_manager.dart';
 import 'package:v04/managers/image_manager.dart';
 import 'package:v04/models/search_model.dart';
 
 var env = DotEnv()..load();
-final heroDataManager = FirestoreHeroDataManager();
+final heroDataManager = FirestoreDataManager();
 final imageManager = ImageManager();
 
 class ApiManager {

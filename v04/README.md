@@ -10,7 +10,7 @@ The Hero Management System is a feature-rich terminal application that allows us
 - **Search Functionality**: Find heroes by name with case-insensitive search
 - **Advanced Filtering**: Filter heroes by alignment (good/bad)
 - **Sorting Options**: Sort heroes by strength, race or gender
-- **CRUD Operations**: Create, read, update, and delete hero records
+- **Data Operations**: Create, read, and delete hero records
 - **ASCII Art Integration**: Automatically convert hero images to ASCII art for terminal display
 - **Cloud Storage**: Persistent data storage using Firebase Firestore
 - **Image Management**: Download and cache hero images locally
@@ -33,8 +33,9 @@ v04/
 │   ├── firebase_config.dart          # Firebase configuration and initialization
 │   ├── v04.dart                      # Main application entry point and UI
 │   ├── managers/
-│   │   ├── api_manager.dart          # Remote API and image download management
-│   │   ├── firestore_hero_data_manager.dart  # Firebase Firestore operations
+│   │   ├── api_manager.dart          # Remote API management
+│   │   ├── image_manager.dart        # Image download management
+│   │   ├── firestore_data_manager.dart  # Firebase Firestore operations
 │   │   └── hero_data_managing.dart   # Abstract interface for data management
 │   └── models/
 │       ├── hero_model.dart           # Hero data model with all properties
@@ -109,19 +110,24 @@ The main data model representing a superhero with complete information:
 
 Singleton class managing all Firebase Firestore operations:
 
-- **CRUD Operations**: Create, read, update, delete heroes
+- **Data Operations**: Create, read, delete heroes
 - **Data Conversion**: Handles Firestore format conversion
 - **Local Caching**: Maintains local hero list for performance
 - **Filtering & Sorting**: Advanced data manipulation capabilities
 
 #### `ApiManager`
 
-Handles external API interactions and image processing:
+Handles external API interactions and image downloading:
 
 - **Image Downloads**: Fetches remote hero images with proper headers
 - **Local Storage**: Saves images locally for ASCII conversion
-- **ASCII Art Generation**: Converts images to terminal-friendly ASCII art
 - **Caching Logic**: Prevents unnecessary re-downloads
+
+#### `ImageManager`
+
+Handles image processing:
+
+- **ASCII Art Generation**: Converts images to terminal-friendly ASCII art
 
 #### `FirebaseConfig`
 
@@ -232,7 +238,7 @@ Key dependencies defined in `pubspec.yaml`:
 ```
 2. Search Heroes
    └── Enter hero name (case-insensitive)
-   └── Returns matching heroes with full details
+   └── Returns matching heroes with limited details
 ```
 
 ## 📈 Performance Considerations
