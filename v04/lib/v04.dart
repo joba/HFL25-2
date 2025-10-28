@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:cli_spin/cli_spin.dart';
 import 'package:cli_table/cli_table.dart';
+import 'package:v04/di/service_locator.dart';
 import 'package:v04/managers/api_manager.dart';
-import 'package:v04/managers/firestore_data_manager.dart';
+import 'package:v04/managers/hero_data_managing.dart';
 import 'package:v04/managers/image_manager.dart';
 import 'package:v04/models/hero_model.dart';
 
-final firestoreDataManager = FirestoreDataManager();
+final firestoreDataManager = getIt<HeroDataManaging>();
 final apiManager = ApiManager();
 final imageManager = ImageManager();
 
