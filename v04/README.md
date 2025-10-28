@@ -30,26 +30,32 @@ The Hero Management System is a feature-rich terminal application that allows us
 ```
 v04/
 ├── bin/
-│   ├── v04.dart                         # Main application entry point
+│   └── v04.dart                         # Main application entry point
 ├── lib/
 │   ├── firebase_config.dart             # Firebase configuration and initialization
-│   ├── v04.dart                         # Main application UI
+│   ├── cli/
+│   │   └── cli_controller.dart          # Menu navigation and CLI flow control
 │   ├── di/
-│   │   ├── service_locator.dart         # Dependency Injection setup
+│   │   └── service_locator.dart         # Dependency Injection setup
 │   ├── managers/
 │   │   ├── api_manager.dart             # Remote API management
 │   │   ├── data_manager.dart            # Handles business logic (sorting, filtering)
 │   │   ├── image_manager.dart           # Image download management
 │   │   ├── firestore_data_manager.dart  # Firebase Firestore operations
 │   │   └── hero_data_managing.dart      # Abstract interface for data management
-│   └── models/
-│       ├── hero_model.dart              # Hero data model with all properties
-│       └── search_model.dart            # Api response model
+│   ├── models/
+│   │   ├── hero_model.dart              # Hero data model with all properties
+│   │   └── search_model.dart            # Api response model
+│   ├── services/
+│   │   └── hero_service.dart            # Business logic and hero operations
+│   └── ui/
+│       ├── hero_display.dart            # Hero formatting and display utilities
+│       └── input_handler.dart           # User input handling and validation
 ├── test/
 │   ├── mocks/
 │   │   ├── heroes-mock.json             # Mock data for unit testing
-│   │   ├── mock_managers.dart           # Mock dataManager class for testing
-│   ├── v04_test.dart                    # Application unit tests
+│   │   └── mock_managers.dart           # Mock dataManager class for testing
+│   └── v04_test.dart                    # Application unit tests
 ├── images/                              # Local hero image cache directory
 ├── .env                                 # Environment variables (not in repo)
 ├── .gitignore                           # Git ignore rules
