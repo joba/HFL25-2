@@ -28,7 +28,8 @@ void showMainMenu() {
   print('\nWelcome, make your choice below:');
   print('1. View Heroes');
   print('2. Search Heroes');
-  print('3. Exit');
+  print('3. Add new Hero');
+  print('4. Exit');
   var menuItem = stdin.readLineSync();
 
   print('\nYou selected: $menuItem\n');
@@ -40,6 +41,9 @@ void showMainMenu() {
       searchHeroes();
       break;
     case '3':
+      addNewHero();
+      break;
+    case '4':
       print('Goodbye for now!');
       exit(0);
     default:
@@ -156,6 +160,37 @@ void searchHeroes() async {
   }
 }
 
+void addNewHero() async {
+  var name = getUserInput<String>('Enter hero name: ');
+
+  // Check if name already exists
+  var searchResults = await firestoreDataManager.searchHeroes(
+    name.toLowerCase(),
+  );
+  if (searchResults.isNotEmpty) {
+    print('A hero with the name "$name" already exists. Enter another name.');
+    addNewHero();
+    return;
+  }
+
+  var strength = getUserInput<int>('Enter hero strength (number): ');
+  var gender = getUserInput<String>('Enter hero gender: ');
+  var race = getUserInput<String>('Enter hero race: ');
+  var alignment = getUserInput<String>('Enter hero alignment (good, evil): ');
+
+  var newHero = HeroModel.fromJson({
+    // Trying to make an id that is unique but short, bc user has to type it when deleting
+    'id': DateTime.now().millisecondsSinceEpoch.toRadixString(36),
+    'name': name,
+    'powerstats': {'strength': strength.toString()},
+    'appearance': {'gender': gender, 'race': race},
+    'biography': {'alignment': alignment},
+  });
+
+  await saveHero(newHero);
+  showMainMenu();
+}
+
 Future<void> saveHero(HeroModel heroToSave) async {
   spinnerSaving.start();
   var result = await firestoreDataManager.saveHero(heroToSave);
@@ -198,7 +233,7 @@ T getUserInput<T>(String prompt) {
 
 void printHeroList(List<HeroModel> heroes) {
   for (var hero in heroes) {
-    if (hero.image?.asciiArt != '') {
+    if (hero.image != null && hero.image?.asciiArt != '') {
       final table = Table(
         header: [
           {

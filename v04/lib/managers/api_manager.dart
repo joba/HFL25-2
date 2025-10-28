@@ -3,12 +3,10 @@ import 'dart:io';
 
 import 'package:dotenv/dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:v04/managers/firestore_data_manager.dart';
 import 'package:v04/managers/image_manager.dart';
 import 'package:v04/models/search_model.dart';
 
 var env = DotEnv()..load();
-final heroDataManager = FirestoreDataManager();
 final imageManager = ImageManager();
 
 class ApiManager {
@@ -100,7 +98,8 @@ class ApiManager {
 
     // Download if not exists
     try {
-      final imageUrl = '$_imageBaseUrl/$heroId-${name.toLowerCase()}.jpg';
+      final nameLowerCase = name.toLowerCase().replaceAll(' ', '-');
+      final imageUrl = '$_imageBaseUrl/$heroId-$nameLowerCase.jpg';
       final localPath = await downloadAndSaveHeroImage(imageUrl, heroId);
       print('Downloaded new image for hero $heroId: $localPath');
       return localPath;

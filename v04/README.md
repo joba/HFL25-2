@@ -29,9 +29,13 @@ The Hero Management System is a feature-rich terminal application that allows us
 
 ```
 v04/
+├── bin/
+│   ├── v04.dart                         # Main application entry point
 ├── lib/
 │   ├── firebase_config.dart             # Firebase configuration and initialization
-│   ├── v04.dart                         # Main application entry point and UI
+│   ├── v04.dart                         # Main application UI
+│   ├── di/
+│   │   ├── service_locator.dart         # Dependency Injection setup
 │   ├── managers/
 │   │   ├── api_manager.dart             # Remote API management
 │   │   ├── data_manager.dart            # Handles business logic (sorting, filtering)
@@ -42,7 +46,9 @@ v04/
 │       ├── hero_model.dart              # Hero data model with all properties
 │       └── search_model.dart            # Api response model
 ├── test/
-│   ├── heroes-mock.json                 # Mock data for unit testing
+│   ├── mocks/
+│   │   ├── heroes-mock.json             # Mock data for unit testing
+│   │   ├── mock_managers.dart           # Mock dataManager class for testing
 │   ├── v04_test.dart                    # Application unit tests
 ├── images/                              # Local hero image cache directory
 ├── .env                                 # Environment variables (not in repo)
